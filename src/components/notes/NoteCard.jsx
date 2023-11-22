@@ -18,8 +18,15 @@ export const NoteCard = ({ date, title, content, isNew, index }) => {
         className="w-full  focus:outline-none text-2xl font-bold rounded-lg resize-none bg-transparent mt-4"
         placeholder="Title here"
       ></input>
-      <div className="w-fit text-grey text-xs flex gap-2 my-2">
+      <div className="w-fit text-grey text-xs flex gap-2 my-2 items-center">
         <Calendar size={12}></Calendar> {formatDate(date)}
+        {isNew ? (
+          <div className="px-2 py-1 bg-bold-regal text-white rounded-md ml-2">
+            New
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
       <textarea
         id={`content${index}`}
