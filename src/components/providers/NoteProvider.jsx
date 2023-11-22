@@ -84,6 +84,9 @@ export const NoteProvider = ({ children }) => {
   }
 
   useEffect(() => {
+    localStorage.setItem(noteKey, JSON.stringify([]));
+    localStorage.setItem(historyKey, JSON.stringify([]));
+
     const note = localStorage.getItem(noteKey);
     if (note) {
       setNotes(JSON.parse(note));

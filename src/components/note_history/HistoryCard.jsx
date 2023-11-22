@@ -11,9 +11,9 @@ export const HistoryCard = ({ date, content, note, index }) => {
 
   if (note !== undefined) {
     noteItem = (
-      <div className="flex flex-col gap-4 w-80 ml-4 p-4 mt-2 bg-rose-100 rounded-lg">
+      <div className="flex flex-col gap-4 w-80 m-4 p-4 bg-red rounded-lg">
         <h2 className="font-semibold">{note.title}</h2>
-        <p className="text-xs mt-2">{note.body}</p>
+        <p className="text-xs">{note.body}</p>
         <div
           className="flex gap-2 underline cursor-pointer items-center text-xs mt-4 self-end"
           onClick={() => restoreNote(index)}
@@ -27,7 +27,7 @@ export const HistoryCard = ({ date, content, note, index }) => {
 
   return (
     <div className="py-2">
-      <div className="text-xs flex gap-1">
+      <div className="text-xs flex gap-1 italic">
         <div>{formatDate(date)}</div>
         <div>{`- ${content}`}</div>
       </div>

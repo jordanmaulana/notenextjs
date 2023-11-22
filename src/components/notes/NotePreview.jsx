@@ -10,7 +10,7 @@ export const NotePreview = () => {
 
   if (notes.length === 0) return <EmptyPlaceholder></EmptyPlaceholder>;
   return (
-    <div className="grid grid-cols-3 gap-6 h-full p-8">
+    <div className="grid grid-cols-3 gap-6 p-8">
       {(notes ?? []).map(({ date, title, body, isNew }, index) => {
         return (
           <NoteCard

@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { NoteContext } from "../providers/NoteProvider";
 import { NewLabel } from "./NewLabel";
 import { formatDate } from "@/utilities/date-utility";
