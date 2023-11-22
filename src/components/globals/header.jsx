@@ -9,7 +9,7 @@ export const Header = () => {
     <header className="bg-regal-blue p-4 flex justify-between">
       <Link href="/">
         <span className="text-2xl font-semibold">Note</span>{" "}
-        <span className="font-semibold">app.</span>
+        <span className="font-semibold">app by Jordan.</span>
       </Link>
       <AddNoteButton></AddNoteButton>
     </header>
