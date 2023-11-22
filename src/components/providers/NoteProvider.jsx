@@ -11,6 +11,7 @@ export const NoteProvider = ({ children }) => {
   function addNote() {
     const newNotes = [...notes];
     const newNote = {
+      title: "",
       date: Date.now(),
       body: "",
     };
@@ -28,10 +29,15 @@ export const NoteProvider = ({ children }) => {
 
   function changeContent(index, newContent) {
     const newNotes = [...notes];
-    const newNote = {
-      body: newContent,
-    };
-    newNotes.splice(index, 1, newNote);
+    newNotes[index].body = newContent;
+
+    setNotes(newNotes);
+    localStorage.setItem("notes", JSON.stringify(newNotes));
+  }
+
+  function changeTitle(index, newContent) {
+    const newNotes = [...notes];
+    newNotes[index].title = newContent;
     setNotes(newNotes);
     localStorage.setItem("notes", JSON.stringify(newNotes));
   }
@@ -45,7 +51,9 @@ export const NoteProvider = ({ children }) => {
   }, []);
 
   return (
-    <NoteContext.Provider value={{ notes, addNote, deleteNote, changeContent }}>
+    <NoteContext.Provider
+      value={{ notes, addNote, deleteNote, changeContent, changeTitle }}
+    >
       {children}
     </NoteContext.Provider>
   );

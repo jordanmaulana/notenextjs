@@ -11,8 +11,16 @@ export const NotePreview = () => {
   if (notes.length === 0) return <EmptyPlaceholder></EmptyPlaceholder>;
   return (
     <div className="grid grid-cols-3 gap-6 h-full p-8">
-      {notes.map(({ body }, index) => {
-        return <NoteCard key={index} content={body} index={index} />;
+      {notes.map(({ date, title, body }, index) => {
+        return (
+          <NoteCard
+            key={index}
+            date={date}
+            title={title}
+            content={body}
+            index={index}
+          />
+        );
       })}
     </div>
   );

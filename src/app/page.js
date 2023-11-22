@@ -4,9 +4,9 @@ import { NotePreview } from "@/components/notes/NotePreview";
 
 export default function Home() {
   return (
-    <div className="relative h-screen">
+    <div className="flex flex-col h-screen">
       <Header></Header>
-      <main>
+      <main className="grow">
         <div className="flex">
           <div className="basis-2/3">
             <NotePreview />
