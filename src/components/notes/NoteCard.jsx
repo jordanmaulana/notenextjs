@@ -9,7 +9,7 @@ export const NoteCard = ({ date, title, content, isNew, index }) => {
   const { deleteNote, changeContent, changeTitle } = useContext(NoteContext);
 
   return (
-    <div className="flex flex-col hover:bg-regal-blue p-4 rounded-lg h-fit">
+    <div className="flex flex-col hover:bg-regal-blue p-4 rounded-lg h-fit shadow-lg">
       <div className="flex gap-4">
         <div className="bg-bold-regal rounded-md w-fit py-1 px-2 text-white text-xs">
           {formatDate(date)}
