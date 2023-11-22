@@ -10,7 +10,7 @@ export const AddNoteButton = () => {
   return (
     <div
       className="flex w-fit items-center gap-4 bg-bold-regal py-2 px-4 rounded-lg text-white cursor-pointer"
-      onClick={addNote}
+      onClick={() => addNote()}
     >
       New Note
       <Plus color="white" />
