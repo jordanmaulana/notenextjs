@@ -16,6 +16,8 @@ export const Footer = () => {
           ❤️
         </div>
 
+        <p className="font-xs italic">"Shinzou wo sasageyo"</p>
+
         <div className="flex gap-2">
           <p>Design by</p>
           <a

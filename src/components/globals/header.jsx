@@ -6,7 +6,7 @@ import { AddNoteButton } from "../notes/AddNoteButton";
 
 export const Header = () => {
   return (
-    <header className="bg-regal-blue p-4 flex justify-between">
+    <header className="bg-regal-blue p-4 flex justify-between items-center">
       <Link href="/">
         <span className="text-2xl font-semibold">Note</span>{" "}
         <span className="font-semibold">app by Jordan.</span>
