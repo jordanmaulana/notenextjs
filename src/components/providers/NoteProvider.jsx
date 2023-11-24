@@ -5,38 +5,33 @@ import { createContext, useState, useEffect } from "react";
 export const NoteContext = createContext();
 
 export const NoteProvider = ({ children }) => {
-  const noteKey = "notes";
   const historyKey = "histories";
 
   const [notes, setNotes] = useState([]);
+
   const [histories, setHistories] = useState([]);
 
-  function addNote(note) {
+  /// variabel biar user ga spam tombol add note
+  const [newNoteAvailable, setNewNoteAvailable] = useState(true);
+
+  function addNote() {
+    if (!newNoteAvailable) return;
+    /// ketika user baru tambah note, disable tombol add note.
+    setNewNoteAvailable(false);
+
     const newNotes = [...notes];
     newNotes.forEach((e) => (e.isNew = false));
-    /// pengennya kalo note itu ga diisi, nilai defaultnya jadi ini
-    /// sedangkan kalo keisi, dia langsung ambil dari props note
+
     const newNote = {
-      title: "",
-      date: Date.now(),
-      body: "",
+      content: JSON.stringify({
+        title: "",
+        content: "",
+      }),
+      created: Date.now(),
       isNew: true,
     };
-
-    console.log(note);
-
-    if (note === undefined) {
-      // note langsung masuk dari props
-      console.log("newNote");
-      newNotes.unshift(newNote);
-    } else {
-      // note ambil dari newNote
-      console.log(`props note`);
-      newNotes.unshift(note);
-    }
+    newNotes.unshift(newNote);
     setNotes(newNotes);
-    localStorage.setItem(noteKey, JSON.stringify(newNotes));
-    addHistory({ content: "Added a new note" });
   }
 
   function addHistory({ content, note }) {
@@ -48,51 +43,22 @@ export const NoteProvider = ({ children }) => {
     };
     newHistories.unshift(newHistory);
     setHistories(newHistories);
-    console.log(`add history ${JSON.stringify(newHistory)}`);
     localStorage.setItem(historyKey, JSON.stringify(newHistories));
   }
 
   function restoreNote(index) {
-    addNote(histories[index].note);
+    submitNote(histories[index].note);
     delete histories[index].note;
     setHistories(histories);
     localStorage.setItem(historyKey, JSON.stringify(histories));
-  }
-
-  function deleteNote(index) {
-    const newNotes = [...notes];
-    const deletedNote = newNotes[index];
-    newNotes.splice(index, 1);
-    setNotes(newNotes);
-    localStorage.setItem(noteKey, JSON.stringify(newNotes));
-    addHistory({ content: "Deleted a note", note: deletedNote });
-  }
-
-  function changeContent(index, newContent) {
-    const newNotes = [...notes];
-    newNotes[index].body = newContent;
-
-    setNotes(newNotes);
-    localStorage.setItem(noteKey, JSON.stringify(newNotes));
-  }
-
-  function changeTitle(index, newContent) {
-    const newNotes = [...notes];
-    newNotes[index].title = newContent;
-    setNotes(newNotes);
-    localStorage.setItem(noteKey, JSON.stringify(newNotes));
+    addHistory({ content: "Restored a note" });
   }
 
   useEffect(() => {
-    // for debugging purpose
-    // localStorage.setItem(noteKey, JSON.stringify([]));
-    // localStorage.setItem(historyKey, JSON.stringify([]));
+    getNotes();
 
-    const note = localStorage.getItem(noteKey);
-    if (note) {
-      setNotes(JSON.parse(note));
-      console.log(`notes ${JSON.stringify(note)}`);
-    }
+    // for debugging purpose
+    // localStorage.setItem(historyKey, JSON.stringify([]));
 
     const history = localStorage.getItem(historyKey);
     if (history) {
@@ -101,16 +67,83 @@ export const NoteProvider = ({ children }) => {
     }
   }, []);
 
+  async function getNotes() {
+    const res = await fetch(
+      "https://devscale-mockapi.fly.dev/api/collections/notes/records?filter=(user='jordanmaulana25@gmail.com')",
+      { cache: "no-store" }
+    );
+    const data = await res.json();
+    setNotes(data.items);
+  }
+
+  async function submitNote(body) {
+    setNewNoteAvailable(true);
+
+    console.log("submit newnote");
+
+    await fetch(
+      "https://devscale-mockapi.fly.dev/api/collections/notes/records",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    addHistory({ content: "Added a new note" });
+    getNotes();
+  }
+
+  async function deleteNote(index) {
+    setNewNoteAvailable(true);
+    if (!notes[index].id) {
+      notes.splice(index, 1);
+      setNotes(notes);
+      return;
+    }
+
+    const res = await fetch(
+      `https://devscale-mockapi.fly.dev/api/collections/notes/records/${notes[index].id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    addHistory({
+      content: `Deleted a note - ${notes[index].id}`,
+      note: notes[index],
+    });
+
+    getNotes();
+  }
+
+  async function updateNote(body) {
+    setNewNoteAvailable(true);
+
+    const res = await fetch(
+      `https://devscale-mockapi.fly.dev/api/collections/notes/records/${body.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    );
+    addHistory({ content: `Updated a note - ${body.id}` });
+    getNotes();
+  }
+
   return (
     <NoteContext.Provider
       value={{
         notes,
         addNote,
         deleteNote,
-        changeContent,
-        changeTitle,
         restoreNote,
         histories,
+        submitNote,
+        updateNote,
       }}
     >
       {children}

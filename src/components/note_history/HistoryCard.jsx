@@ -10,10 +10,11 @@ export const HistoryCard = ({ date, content, note, index }) => {
   let noteItem = <div></div>;
 
   if (note !== undefined) {
+    const bodyContent = JSON.parse(note.content);
     noteItem = (
       <div className="flex flex-col gap-4 w-80 m-4 p-4 bg-red rounded-lg">
-        <h2 className="font-semibold">{note.title}</h2>
-        <p className="text-xs">{note.body}</p>
+        <h2 className="font-semibold">{bodyContent.title}</h2>
+        <p className="text-xs">{bodyContent.content}</p>
         <div
           className="flex gap-2 underline cursor-pointer items-center text-xs mt-4 self-end"
           onClick={() => restoreNote(index)}
