@@ -5,7 +5,7 @@ import { createContext, useState, useEffect } from "react";
 export const NoteContext = createContext();
 
 export const NoteProvider = ({ children }) => {
-  const historyKey = "histories";
+  const historyKey = "newHistories";
 
   const [notes, setNotes] = useState([]);
 
